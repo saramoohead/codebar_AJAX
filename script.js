@@ -23,3 +23,36 @@ function formatDate(start, end) {
 
     return date;
 }
+
+function retrieveGenres() {
+    $.ajax({
+        url: 'http://www.bbc.co.uk/tv/programmes/genres.json',
+        dataType: 'json'
+    }).done(function(data) {
+        $.each(data.categories, function (index, value) {
+            $('#genres').append("<li id=\"" + value.key + "\">" + value.title + "</li>");
+        });
+    });
+}
+
+retrieveGenres();
+
+$(document).ready(function () {
+    $("#genres").on('click', 'li', function () {
+        getTomorrowSchedule($(this).attr("id"));
+    });
+});
+
+
+function getTomorrowSchedule(genre) {
+    $.ajax({
+        url: 'http://www.bbc.co.uk/tv/programmes/genres/' + genre + '/schedules/tomorrow.json',
+        dataType: 'json'
+    }).done(function(data) {
+        $.each(data.broadcasts, function (index, value) {
+            $("#programmes").append("<li>" + this.programme.display_titles.title + "</li>");
+        });
+    });
+}
+
+
